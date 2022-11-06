@@ -1,0 +1,43 @@
+# The colored objects are either red, green, blue, or yellow.
+color = POSSIBLE_COLORS
+POSSIBLE_COLORS = [Color_RED, Color_GREEN, Color_BLUE, Color_YELLOW]
+# When we scan the objects, we store all the color numbers in a list.
+# We start with an empty list. It will grow as we add colors to it.
+color_list = {}
+# This loop scans the colors of the objects. It repeats until 8 objects
+# are scanned and placed in the chute. This is done by repeating the loop
+# while the length of the list is still less than 8.
+is_done = False
+
+while not is_done:
+     
+        # if color_sensor.color() in POSSIBLE_COLORS and color_sensor.color() not in color_list:
+        # color_list.append(color_sensor.color(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW))
+        # ev3.speaker.beep(2000, 100)
+        
+        if color_sensor.color() not in color_list:
+            ev3.speaker.beep(2000, 100)
+            color_list.append(color)
+        
+        #Show how many colored objects we have already scanned.
+        ev3.screen.print(len(color_list))
+        is_done = False
+        # # Wait for the center button to be pressed or a color to be scanned.
+        while not is_done:
+            # Store True if the center button is pressed or False if not.
+            pressed = Button.CENTER in ev3.buttons.pressed()
+            # Store the color measured by the Color Sensor.
+            color = color_sensor.color()
+            # If the center button is pressed or a color is detected,
+            # break out of the loop.     
+            if color:
+                is_done = True
+            if pressed or color in POSSIBLE_COLORS:
+                ev3.speaker.beep()
+                                      
+        # We don't want to register the same color once more if we're still
+        # looking at the same object. So before we continue, we wait until the
+        # sensor no longer sees the object.          
+while len(color_list) < 8:
+        # Show how many colored objects we have already scanned.
+            ev3.screen.print(len(color_list))
