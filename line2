@@ -1,0 +1,120 @@
+#!/usr/bin/env pybricks-micropython
+from pybricks.parameters import Port
+from pybricks.tools import wait
+from pybricks.robotics import DriveBase
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor, TouchSensor, ColorSensor
+from pybricks.parameters import Port, Button, Color, ImageFile, SoundFile
+from pybricks.tools import wait
+from pybricks.nxtdevices import LightSensor
+
+POSSIBLE_COLORS = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
+
+ev3 = EV3Brick 
+# Initialize the motors.
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.C)
+
+# Initialize the color sensor.
+line_sensor = LightSensor(Port.S1)
+color_sensor = ColorSensor(Port.S3)
+
+# Initialize the drive base.
+robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=104)
+
+# Calculate the light threshold. Choose values based on your measurements.
+BLACK = 9
+WHITE = 85
+threshold = (BLACK + WHITE) / 2
+
+# Set the drive speed at 100 millimeters per second.
+DRIVE_SPEED = 100
+
+# Set the gain of the proportional line controller. This means that for every
+# percentage point of light deviating from the threshold, we set the turn
+# rate of the drivebase to 1.2 degrees per second.
+
+# For example, if the light value deviates from the threshold by 10, the robot
+# steers at 10*1.2 = 12 degrees per second.
+PROPORTIONAL_GAIN = 1.2
+
+# Start following the line endlessly.
+A = True 
+while True:
+    # Calculate the deviation from the threshold.
+    deviation = line_sensor.reflection() - threshold
+    treshold = deviation 
+
+    # Calculate the turn rate.
+    turn_rate = PROPORTIONAL_GAIN * deviation
+
+    # Set the drive base speed and turn rate.
+    robot.drive(DRIVE_SPEED, turn_rate)
+
+    # You can wait for a short time or do other things in this loop.
+    wait(10)
+    #  # When we scan the objects, we store all the color numbers in a list.
+    # # We start with an empty list. It will grow as we add colors to it.
+    # color_list = []
+
+    # # This loop scans the colors of the objects. It repeats until 8 objects
+    # # are scanned and placed in the chute. This is done by repeating the loop
+    # # while the length of the list is still less than 8.
+    # # while len(color_list) < 8:
+    #     # Show an arrow that points to the color sensor.
+    #     # ev3.screen.load_image(ImageFile.RIGHT)
+
+    #     # Show how many colored objects we have already scanned.
+    #     # ev3.screen.print(len(color_list))
+
+    #     # Wait for the center button to be pressed or a color to be scanned.
+    # while True:
+    #         # Store True if the center button is pressed or False if not.
+    #         pressed = Button.CENTER in ev3.buttons.pressed()
+    #         # Store the color measured by the Color Sensor.
+    #         color = color_sensor.color()
+    #         # If the center button is pressed or a color is detected,
+    #         # break out of the loop.
+    #         if pressed or color in POSSIBLE_COLORS:
+    #             break
+    #             ev3.speaker.beep(1000, 100)
+
+
+    #     # Otherwise, a color was scanned. So we add (append) it to the list.
+    #         # ev3.speaker.beep(1000, 100)
+    #             color_list.append(color)
+
+    #     # We don't want to register the same color once more if we're still
+    #     # looking at the same object. So before we continue, we wait until the
+    #     # sensor no longer sees the object.
+    # while color_sensor.color() in POSSIBLE_COLORS:
+    #     pass
+    #     # ev3.speaker.beep(2000, 100)
+
+    #             # Show an arrow pointing to the center button, to ask if we are done.
+    #     # ev3.screen.load_image(ImageFile.BACKWARD)
+    #     # wait(2000)
+
+    # # Play a sound and show an image to indicate that we are done scanning.
+    # # ev3.speaker.play_file(SoundFile.READY)
+    # # ev3.screen.load_image(ImageFile.EV3)
+
+    # # Now sort the bricks according the list of colors that we stored.
+    # # We do this by going over each color in the list in a loop.
+    # for color in color_list:
+    #     # Wait for one second between each sorting action.
+    #     wait(1000)
+
+    #     # Run the conveyor belt motor to the right position based on the color.
+    #     if color == Color.BLUE:
+    #         ev3.speaker.say('blue')
+            
+    #     elif color == Color.GREEN:
+    #         ev3.speaker.say('green')
+            
+    #     elif color == Color.YELLOW:
+    #         ev3.speaker.say('yellow')
+            
+    #     elif color == Color.RED:
+    #         ev3.speaker.say('red')
+    #         A = False
